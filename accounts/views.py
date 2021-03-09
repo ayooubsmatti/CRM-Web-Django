@@ -1,6 +1,6 @@
 from django.shortcuts import render
 # Create your views here.
-from django.http import HttpResponse
+# from django.http import HttpResponse
 
 
 def home(request):
@@ -8,8 +8,8 @@ def home(request):
 
 
 def products(request):
-    return HttpResponse("products")
+    return render(request, 'accounts/products.html')
 
 
 def customer(request):
-    return HttpResponse("customer")
+    return render(request, 'accounts/customer.html')
