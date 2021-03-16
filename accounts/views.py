@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from .decorators import unauthenticated_user, allowed_users, admin_only
 from .models import *
 from django.contrib.auth.models import Group
-from .forms import OrderForm
+from .forms import OrderForm, CustomerForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.forms import inlineformset_factory
@@ -122,6 +122,21 @@ def customer(request, pk_test):
         'myFilter': myFilter,
     }
     return render(request, 'accounts/customer.html', context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer'])
+def accountSettings(request):
+    customer = request.user.customer
+    form = CustomerForm(instance=customer)
+
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, request.FILES, instance=customer)
+        if form.is_valid():
+            form.save()
+
+    context = {'form': form}
+    return render(request, 'accounts/account_settings.html', context)
 
 
 @login_required(login_url='login')
